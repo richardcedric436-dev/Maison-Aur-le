@@ -42,18 +42,20 @@
   .hero-art { background: var(--mist); border-radius: 50% 50% 8px 8px / 62% 62% 8px 8px; padding: 12% 8% 6%; }
   .hero-art img { width: 100%; aspect-ratio: 1; object-fit: contain; }
 
-  .collection { padding-bottom: 72px; }
+  .collection { padding-bottom: 56px; }
   h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(1.8rem, 3.4vw, 2.5rem); margin: 0 0 8px; }
   .lead { margin: 0 0 24px; color: var(--muted); }
-  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
   .filters button { font: inherit; font-weight: 500; padding: 8px 18px; border-radius: 99px; border: 1.5px solid var(--ink); background: none; color: var(--ink); cursor: pointer; }
   .filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 36px 28px; }
-  .tile .stage { background: var(--mist); border-radius: 6px; padding: 10px; }
-  .tile .stage img { width: 100%; aspect-ratio: 1; object-fit: contain; }
-  .tile h3 { font-family: var(--serif); font-weight: 500; font-size: 1.3rem; margin: 14px 0 2px; }
-  .tile .notes { margin: 0; color: var(--muted); font-size: .95rem; }
-  .buy { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  /* Grille resserrée : davantage de produits visibles sans grands espaces vides */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 22px 18px; align-items: stretch; }
+  .tile { min-width: 0; display: flex; flex-direction: column; }
+  .tile .stage { background: var(--mist); border-radius: 8px; padding: 5px; overflow: hidden; }
+  .tile .stage img { width: 100%; height: 205px; object-fit: contain; }
+  .tile h3 { font-family: var(--serif); font-weight: 500; font-size: 1.12rem; line-height: 1.25; margin: 9px 0 2px; }
+  .tile .notes { margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.35; }
+  .buy { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 9px; }
   .price { font-weight: 700; }
   .price.tbd { font-weight: 400; color: var(--muted); }
   .add { font: inherit; font-weight: 500; background: none; border: 1.5px solid var(--ink); color: var(--ink); padding: 6px 14px; border-radius: 99px; cursor: pointer; }
@@ -72,6 +74,10 @@
   .btn.full { display: block; width: 100%; text-align: center; margin-top: 12px; }
   .ghost { font: inherit; font-weight: 500; background: none; color: var(--ink); border: 1.5px solid var(--ink); border-radius: 99px; padding: 8px 18px; cursor: pointer; }
   .ghost:hover { background: var(--ink); color: var(--paper); }
+  .badges { margin-left: auto; display: flex; gap: 6px; }
+  .badge { border: 1.5px solid currentColor; border-radius: 5px; padding: 1px 7px; font-size: .75rem; font-weight: 700; }
+  .recap { background: var(--mist); border-radius: 8px; padding: 12px 14px; margin: 0 0 14px; }
+  .ghost.full { display: block; width: 100%; margin: 10px 0 18px; text-align: center; }
   .overlay { position: fixed; inset: 0; background: rgba(42,27,46,.5); z-index: 40; }
   .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100%); background: var(--paper); z-index: 50; display: flex; flex-direction: column; box-shadow: -12px 0 40px rgba(0,0,0,.2); }
   .drawer[hidden], .overlay[hidden] { display: none; }
@@ -100,6 +106,18 @@
     nav a.link { display: none; }
     .hero { grid-template-columns: 1fr; gap: 28px; padding-bottom: 48px; }
     .hero-art { order: -1; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
+    .tile .stage img { height: clamp(145px, 42vw, 205px); }
+    .tile h3 { font-size: 1.02rem; }
+    .tile .notes { font-size: .8rem; }
+    .buy { align-items: flex-start; flex-direction: column; gap: 7px; }
+    .add { width: 100%; }
+  }
+  @media (min-width: 1100px) {
+    .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+  @media (min-width: 761px) and (max-width: 1099px) {
+    .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
@@ -138,7 +156,7 @@
     <dl>
       <div><dt>Livraison offerte dès 70 $</dt><dd>Expédition sous 48 h, suivi de colis par e-mail.</dd></div>
       <div><dt>Retour sous 14 jours</dt><dd>Un flacon ne vous convient pas ? Renvoyez-le non ouvert.</dd></div>
-      <div><dt>Paiement par mobile</dt><dd>Wave, Orange Money ou Mobile Money, confirmation par WhatsApp.</dd></div>
+      <div><dt>Paiement sécurisé</dt><dd>Carte Visa ou Mastercard, Wave, Orange Money, Max it ou Mobile Money.</dd></div>
       <div><dt>Produits d’origine</dt><dd>Parfums achetés auprès de fournisseurs agréés, factures à l’appui.</dd></div>
     </dl>
   </div>
@@ -192,12 +210,38 @@
     phone: "0768290201",        // numéro Wave / Orange Money / Mobile Money, et WhatsApp
     whatsapp: "2250768290201",  // même numéro au format international sans « + » (225 = Côte d’Ivoire : à adapter)
   };
+  // Paiement par carte : lien de paiement sécurisé de votre prestataire (Stripe, CinetPay, PayDunya…), optionnel.
+  // Vide : le client envoie sa commande sur WhatsApp et vous lui répondez avec un lien de paiement pour le montant exact.
+  const CARD_PAYMENT_URL = "";
+  const cardLink = /^https:\/\//.test(CARD_PAYMENT_URL) ? CARD_PAYMENT_URL : "";
   const XOF_PER_EUR = 655.957;  // parité fixe du franc CFA : sert à estimer le montant en FCFA
   const PAY_METHODS = [
-    { id: "wave", label: "Wave" },
-    { id: "orange", label: "Orange Money" },
-    { id: "mobile", label: "Mobile Money" },
+    { id: "card",   label: "Carte bancaire",        short: "Carte bancaire", card: true },
+    { id: "wave",   label: "Wave",                  short: "Wave",         app: "wave" },
+    { id: "orange", label: "Orange Money",          short: "Orange Money" },
+    { id: "maxit",  label: "Max it (Orange Money)", short: "Max it",       app: "maxit" },
+    { id: "mobile", label: "Mobile Money",          short: "Mobile Money" },
   ];
+  // Applications que l’on peut ouvrir depuis le site (identifiants publics des stores)
+  const APPS = {
+    wave:  { label: "Wave",   android: "com.wave.personal",         ios: "https://apps.apple.com/app/id1523884528" },
+    maxit: { label: "Max it", android: "com.orange.myorange.oci",   ios: "https://apps.apple.com/app/id1061120855" },
+  };
+  const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isMobile = () => /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+  // Android : ouvre l’appli si elle est installée, sinon la page Play Store. iPhone : page App Store (bouton « Ouvrir »).
+  function appUrl(a, ua = navigator.userAgent) {
+    const store = "https://play.google.com/store/apps/details?id=" + a.android;
+    if (/android/i.test(ua)) return "intent://#Intent;package=" + a.android + ";S.browser_fallback_url=" + encodeURIComponent(store) + ";end";
+    if (/iphone|ipad|ipod/i.test(ua)) return a.ios;
+    return null;
+  }
+  function openApp(a) {
+    const url = appUrl(a);
+    if (!url) return;
+    try { sessionStorage.setItem("resumePay", "1"); } catch {}  // au retour sur le site, on reprend à l’étape paiement
+    location.href = url;
+  }
   const phoneDisplay = SHOP.phone.replace(/(\d{2})(?=\d)/g, "$1 ");
   const nf = new Intl.NumberFormat("fr-FR");
   const fmtFcfa = (n) => nf.format(n).replace(/\s/g, " ") + " FCFA";
@@ -250,7 +294,17 @@
   const drawerBody = document.getElementById("drawerBody");
   const drawerTitle = document.getElementById("drawerTitle");
   let step = "cart";                 // cart → checkout → pay → done
-  let order = { name: "", phone: "", address: "", method: "wave" };
+  function loadOrder() {
+    try {
+      const o = JSON.parse(localStorage.getItem("order") || "null");
+      if (o && typeof o === "object") return {
+        name: String(o.name || "").slice(0, 80), phone: String(o.phone || "").slice(0, 20), address: String(o.address || "").slice(0, 250),
+        method: PAY_METHODS.some(m => m.id === o.method) ? o.method : "wave" };
+    } catch {}
+    return { name: "", phone: "", address: "", method: "wave" };
+  }
+  function saveOrder() { try { localStorage.setItem("order", JSON.stringify(order)); } catch {} }
+  let order = loadOrder();
   let sent = null;
 
   function openDrawer(s) {
@@ -308,6 +362,7 @@
           err.textContent = "Merci d’indiquer votre nom, un numéro valide et votre adresse de livraison.";
           return;
         }
+        saveOrder();
         go("pay");
       } },
       field("f-name", "Nom complet", name),
@@ -315,28 +370,53 @@
       field("f-addr", "Adresse de livraison", addr),
       h("fieldset", { class: "methods" }, h("legend", {}, "Mode de paiement"),
         ...PAY_METHODS.map(m => h("label", { class: "method" },
-          h("input", { type: "radio", name: "pay", value: m.id, checked: order.method === m.id }), m.label))),
+          h("input", { type: "radio", name: "pay", value: m.id, checked: order.method === m.id }), m.label,
+          m.card ? h("span", { class: "badges" }, h("span", { class: "badge" }, "Visa"), h("span", { class: "badge" }, "Mastercard")) : null))),
       err,
       h("button", { class: "btn full", type: "submit" }, "Continuer vers le paiement"),
       h("button", { class: "ghost", type: "button", style: "margin-top:12px", onclick: () => go("cart") }, "Retour au panier"));
     return form;
   }
 
+  const recap = () => h("div", { class: "recap" },
+    ...lines().map(({ p, qty }) => h("div", { class: "small" }, qty + " × " + p.name + (p.size ? " (" + p.size + ")" : ""))),
+    h("div", { class: "small muted", style: "margin-top:6px" }, "Livraison : " + order.address));
+
+  function viewPayCard(m) {
+    const link = cardLink;
+    return h("div", {},
+      h("p", {}, "Montant à régler : ", h("strong", {}, usd.format(totalUsd())), " soit environ ", h("strong", {}, fmtFcfa(totalFcfa())), "."),
+      recap(),
+      h("p", {}, link
+        ? "Payez par carte (Visa, Mastercard…) sur la page sécurisée de notre prestataire de paiement, puis envoyez votre commande sur WhatsApp."
+        : "Paiement par carte (Visa, Mastercard…) : envoyez votre commande sur WhatsApp. Nous vous répondons avec un lien de paiement sécurisé pour le montant exact."),
+      h("p", { class: "muted small" }, "Saisissez les informations de votre carte uniquement sur la page de paiement sécurisée. Ne les envoyez jamais par WhatsApp ni par message."),
+      link ? h("button", { class: "ghost full", type: "button", onclick: () => window.open(link, "_blank", "noopener") }, "Payer par carte") : null,
+      h("button", { class: "btn full", type: "button", onclick: () => sendOrder(m) }, link ? "Envoyer ma commande sur WhatsApp" : "Envoyer ma commande et recevoir le lien de paiement"),
+      h("button", { class: "ghost", type: "button", style: "margin-top:12px", onclick: () => go("checkout") }, "Retour"));
+  }
+
   function viewPay() {
     const m = PAY_METHODS.find(x => x.id === order.method);
+    if (m.card) return viewPayCard(m);
+    const app = m.app && APPS[m.app];
     const copy = h("button", { class: "ghost", type: "button", onclick: async () => {
       try { await navigator.clipboard.writeText(SHOP.phone); copy.textContent = "Numéro copié"; } catch { copy.textContent = "Copie impossible"; }
     } }, "Copier le numéro");
     return h("div", {},
       h("p", {}, "Montant à envoyer : ", h("strong", {}, usd.format(totalUsd())), " soit environ ", h("strong", {}, fmtFcfa(totalFcfa())), "."),
+      recap(),
       h("div", { class: "numberbox" },
-        h("div", { class: "small muted" }, "Envoyez l’argent avec " + m.label + " au"),
+        h("div", { class: "small muted" }, "Envoyez l’argent avec " + m.short + " au"),
         h("div", { class: "number" }, phoneDisplay), copy),
+      app && isMobile() ? h("div", {},
+        h("button", { class: "ghost full", type: "button", onclick: () => openApp(app) }, "Ouvrir " + app.label),
+        isIOS() ? h("p", { class: "muted small" }, "Sur iPhone, une page de l’App Store s’ouvre : appuyez sur « Ouvrir ».") : null) : null,
       h("ol", { class: "steps" },
-        h("li", {}, "Ouvrez l’application " + m.label + " et choisissez l’envoi d’argent."),
-        h("li", {}, "Saisissez le numéro ci-dessus et le montant."),
+        h("li", {}, "Copiez le numéro, puis ouvrez l’application " + m.short + "."),
+        h("li", {}, "Choisissez l’envoi d’argent, saisissez le numéro et le montant."),
         h("li", {}, "Gardez la capture d’écran de la confirmation."),
-        h("li", {}, "Cliquez sur le bouton ci-dessous, puis joignez la capture dans WhatsApp.")),
+        h("li", {}, "Revenez ici, cliquez sur le bouton ci-dessous, puis joignez la capture dans WhatsApp.")),
       h("p", { class: "muted small" }, "Le montant exact en FCFA est confirmé avec vous sur WhatsApp."),
       h("button", { class: "btn full", type: "button", onclick: () => sendOrder(m) }, "Envoyer ma commande sur WhatsApp"),
       h("button", { class: "ghost", type: "button", style: "margin-top:12px", onclick: () => go("checkout") }, "Retour"));
@@ -348,15 +428,15 @@
       "Bonjour, je souhaite passer commande (" + ref + ") :",
       ...lines().map(({ p, qty }) => "- " + qty + " × " + p.name + " (" + p.brand + (p.size ? ", " + p.size : "") + ") : " + usd.format(unitUsd(p.price) * qty)),
       "Total : " + usd.format(totalUsd()) + " (environ " + fmtFcfa(totalFcfa()) + ")",
-      "Paiement : " + m.label + " au " + phoneDisplay,
+      m.card ? (cardLink ? "Paiement : carte bancaire (Visa, Mastercard…) via votre lien de paiement. Je vous envoie la confirmation du paiement." : "Paiement : carte bancaire (Visa, Mastercard…). Merci de m’envoyer le lien de paiement sécurisé.") : "Paiement : " + m.label + " au " + phoneDisplay,
       "Nom : " + order.name,
       "Téléphone : " + order.phone,
       "Adresse de livraison : " + order.address,
-      "Je vous envoie la capture d’écran du paiement.",
-    ].join("\n");
+      m.card ? null : "Je vous envoie la capture d’écran du paiement.",
+    ].filter(Boolean).join("\n");
     const url = waUrl(text);
     window.open(url, "_blank", "noopener");
-    sent = { ref, url };
+    sent = { ref, url, card: !!m.card && !cardLink };
     cart = []; saveCart(); updateCartButton();
     go("done");
   }
@@ -364,7 +444,9 @@
   function viewDone() {
     return h("div", {},
       h("p", {}, "Merci ! Votre commande ", h("strong", {}, sent.ref), " est prête à être envoyée sur WhatsApp."),
-      h("p", { class: "muted" }, "Envoyez le message et la capture d’écran du paiement. Nous confirmons la commande dès réception."),
+      h("p", { class: "muted" }, sent.card
+        ? "Envoyez le message : nous vous répondons avec votre lien de paiement sécurisé. La commande est confirmée après le paiement."
+        : "Envoyez le message et la capture d’écran du paiement. Nous confirmons la commande dès réception."),
       h("p", { class: "small" }, "WhatsApp ne s’est pas ouvert ? ", h("a", { href: sent.url, target: "_blank", rel: "noopener" }, "Ouvrir WhatsApp")),
       h("button", { class: "btn full", type: "button", onclick: closeDrawer }, "Fermer"));
   }
@@ -431,6 +513,8 @@
   document.getElementById("contact").target = "_blank";
   document.getElementById("contact").rel = "noopener";
   updateCartButton();
+  // Retour depuis l’appli de paiement : on rouvre directement l’étape paiement
+  try { if (sessionStorage.getItem("resumePay") && cart.length && order.name) openDrawer("pay"); sessionStorage.removeItem("resumePay"); } catch {}
 </script>
 </body>
 </html>
